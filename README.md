@@ -1,97 +1,87 @@
-# 📅 Calendly Clone - Automated Scheduling Platform
+# Generating Prisma Client (Prisma ORM v7) (/docs/orm/v7/prisma-client/setup-and-configuration/generating-prisma-client)
 
-[![License: MIT](https://shields.io)](https://opensource.org)
-[![PRs Welcome](https://shields.io)](http://makeapullrequest.com)
+> For the complete Prisma documentation index, see [llms.txt](https://www.prisma.io/docs/llms.txt). A markdown version of any docs page is available by appending `.md` to its URL.
 
-A robust, full-stack **Calendly-inspired scheduling application** designed to eliminate the back-and-forth emails traditionally required to find a mutually agreeable meeting time. Users can easily define their weekly availability, create custom event types, and share a public booking link so clients or colleagues can schedule appointments instantly.
+Learn when and how to run prisma generate, configure the generator output, and import the generated client in your app.
 
----
+Location: ORM > v7 > Prisma Client > Setup and Configuration > Generating Prisma Client
 
-## 🚀 Core Features
+`prisma generate` creates Prisma Client from the models and generator configuration in your `schema.prisma` file.
 
-### 👤 User Dashboard
-* **Availability Management:** Set custom working hours and time zones for different days of the week.
-* **Custom Event Types:** Create multiple meeting formats with varying durations (e.g., 15-minute quick sync, 30-minute interview, 60-minute consultation).
-* **Booking History:** A centralized dashboard to view, track, and manage upcoming and past scheduled appointments.
+## Define a generator [#define-a-generator]
 
-### 📅 Booking Interface
-* **Interactive Calendar:** A clean, intuitive client-facing calendar view showing real-time slot availability.
-* **Time-Slot Validation:** Dynamic calculations to ensure overlapping meetings or past times cannot be booked.
-* **Instant Confirmation:** Automated confirmation screen showing meeting summaries post-booking.
+In Prisma ORM v7, the `output` field is required:
 
----
+```prisma title="schema.prisma"
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+```
 
-## 🛠️ Architecture & Tech Stack
+## Generate the client [#generate-the-client]
 
-This project is built using a modern decoupled architecture:
+Run the following command whenever you add models, change fields, or update generator settings:
 
-* **Frontend:** [React.js](https://react.dev) / [Next.js](https://nextjs.org) for a highly responsive, component-based user interface.
-* **Styling:** [Tailwind CSS](https://tailwindcss.com) for fully responsive, utility-first design.
-* **Backend:** [Node.js](https://nodejs.org) & [Express](https://expressjs.com) handling robust RESTful API endpoints and scheduling logic.
-* **Database:** [MongoDB](https://mongodb.com) (with Mongoose) OR [PostgreSQL](https://postgresql.org) (with Prisma) for persistent data storage of users, availability models, and bookings.
-* **Authentication:** Secure user onboarding via JWT (JSON Web Tokens) or OAuth 2.0.
+  
 
----
+#### bun
 
-## 🚦 Getting Started
-
-Follow these steps to set up the project locally on your machine.
-
-### Prerequisites
-Make sure you have **Node.js (v18+ or higher)** and **npm** installed.
-
-### 1. Clone the Repository
 ```bash
-git clone https://github.com
-cd calendly-clone
+bunx prisma generate
 ```
 
-### 2. Set Up the Environment Variables
-Create a `.env` file in your root backend (and/or frontend) directory and populate it with your configuration:
-```env
-PORT=5000
-DATABASE_URL=your_database_connection_string
-JWT_SECRET=your_super_secret_jwt_key
-```
+#### pnpm
 
-### 3. Install Dependencies & Run Locally
-Navigate to both the server and client folders to install and boot the project:
-
-**For the Backend Server:**
 ```bash
-cd server
-npm install
-npm run dev
+pnpm prisma generate
 ```
 
-**For the Frontend Client:**
+#### yarn
+
 ```bash
-cd ../client
-npm install
-npm start
+yarn prisma generate
 ```
 
----
+#### npm
 
-## 🛣️ API Roadmap & Endpoints (Quick Look)
+```bash
+npx prisma generate
+```
 
-* `POST /api/auth/register` - Create a new host account.
-* `GET /api/user/availability` - Fetch the host's active working hours.
-* `POST /api/bookings/new` - Submit a new client-scheduled meeting slot.
+If you want the CLI-specific options such as `--watch` or `--generator`, see the [`prisma generate` command reference](https://www.prisma.io/docs/cli/v7/generate).
 
----
+## Import the generated client [#import-the-generated-client]
 
-## 🤝 Contributing
+Import Prisma Client from the output path you configured:
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```ts
+import { PrismaClient } from "./generated/client";
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+const prisma = new PrismaClient();
+```
 
----
+## When to run generate [#when-to-run-generate]
 
-## 📄 License
-Distributed under the **MIT License**. See `LICENSE` for more information.
+You should run `prisma generate` after:
+
+* changing your Prisma schema
+* updating generator configuration
+* enabling features that affect the client API
+* pulling schema changes from another branch or teammate
+
+In many projects it also makes sense to run `prisma generate` in `postinstall` or before your production build so deployments always use a current client.
+
+## Related pages [#related-pages]
+
+* [Introduction to Prisma Client](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/introduction)
+* [Generators in the Prisma schema](https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators)
+* [Prisma CLI reference for generate](https://www.prisma.io/docs/cli/v7/generate)
+
+## Related pages
+
+- [`Configuring error formatting`](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/error-formatting): This page explains how to configure the formatting of errors when using Prisma Client
+- [`Custom model and field names`](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/custom-model-and-field-names): Learn how you can decouple the naming of Prisma models from database tables to improve the ergonomics of the generated Prisma Client API
+- [`Database connections`](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/databases-connections): Learn how to manage database connections and configure connection pools
+- [`Database polyfills`](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/database-polyfills): Prisma Client provides features that are not achievable with relational databases. These features are referred to as "polyfills" and explained on this page.
+- [`Introduction to Prisma Client`](https://www.prisma.io/docs/orm/v7/prisma-client/setup-and-configuration/introduction): Learn how to set up and configure Prisma Client in your project
