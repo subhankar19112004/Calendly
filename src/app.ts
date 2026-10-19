@@ -1,7 +1,9 @@
 import express, {Express} from "express";
 import { usersRouter } from "./routes/users.routes.js";
 
-const app : Express = express();
+const app: Express = express();
+
+app.use(express.json());
 
 app.get('/health', (_req, res) => {
     res.json({
