@@ -1,4 +1,4 @@
-import { getAll, getUserById } from "../repositories/users.repository.js"
+import { getAll, getUserById, createUser as createUserRepo } from "../repositories/users.repository.js"
 
 export const findAllUsers = async () => {
     const users = await getAll();
@@ -10,5 +10,10 @@ export const findUserById = async (id: number) => {
     if (!user) {
         throw new Error('User not found');
     }
+    return user;
+}
+
+export const createUser = async (userData: { name: string, email: string }) => {
+    const user = await createUserRepo(userData);
     return user;
 }
