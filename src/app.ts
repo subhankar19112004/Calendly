@@ -1,5 +1,6 @@
 import express, {Express} from "express";
 import { usersRouter } from "./routes/users.routes.js";
+import { errorHandler } from "./middlewares/error-handlers.js";
 
 const app: Express = express();
 
@@ -14,6 +15,8 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/users', usersRouter);
+
+app.use(errorHandler)
 
 
 export default app;
