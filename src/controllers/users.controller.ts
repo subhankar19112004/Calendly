@@ -18,9 +18,7 @@ export const findUserByIdController = async (req: Request, res: Response) => {
 
 export const createUserController = async (req: Request, res: Response) => {
     try {
-        const { name, email } = req.body;
-        const newUser = await createUser({ name, email });
-        res.status(201).json(newUser);
+        res.status(201).json({});
     } catch (error) {
         res.status(500).json({ message: 'Error creating user' });
     }
