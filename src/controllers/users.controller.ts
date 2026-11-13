@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { createUser, findAllUsers, findUserById } from '../services/users.service.js';
+import { notFound } from '../utils/api-error.js';
 
 export const findAllUsersController = async (_req: Request, res: Response) => {
     const response = await findAllUsers();
@@ -12,7 +13,8 @@ export const findUserByIdController = async (req: Request, res: Response) => {
         const user = await findUserById(Number(id));
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: 'Error finding user by ID' });
+        const apiError = notFound("User not found");
+        res.status(apiError.statusCode).json(apiError);
     }
 }
 
