@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ApiError } from '../utils/api-error.js';
+import { NODE_ENV } from '../config/env.js';
 
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => { 
     if (err instanceof ApiError) {
@@ -12,4 +13,15 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
         res.status(err.statusCode).json(body);
         return;
     }
+
+    console.error("[Error]", err);
+
+    const body: Record<string, unknown> = {
+        success: false,
+        message: "Something went wrong. Please try again later.",
+    }
+    if (NODE_ENV === 'development') {
+        body.details = err.stack;
+    }
+    res.status(500).json(body);
 }
