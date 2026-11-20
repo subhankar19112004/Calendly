@@ -1,4 +1,5 @@
 import { prisma } from "../config/database.js";
+import { CreateUserDto } from "../dtos/users.dto.js";
 
 export const getAll = async () => {
     const users = await prisma.user.findMany();
@@ -14,7 +15,7 @@ export const getUserById = async (id: number) => {
     return user;
 }
 
-export const createUser = async (userData: { name: string, email: string }) => {
+export const createUser = async (userData: CreateUserDto) => {
     const user = await prisma.user.create({
         data: userData
     });
