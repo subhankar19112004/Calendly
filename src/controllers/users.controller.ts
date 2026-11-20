@@ -5,7 +5,7 @@ import { sendSuccess } from '../utils/api-response.js';
 
 export const findAllUsersController = async (_req: Request, res: Response) => {
     const response = await findAllUsers();
-    sendSuccess(res, response, 200, 'Users retrieved successfully');
+    sendSuccess(res, response, 200, `Users retrieved successfully. ${response.length} users found`);
 }
 
 export const findUserByIdController = async (req: Request, res: Response) => {
@@ -21,7 +21,8 @@ export const findUserByIdController = async (req: Request, res: Response) => {
 
 export const createUserController = async (req: Request, res: Response) => {
     try {
-        res.status(201).json({});
+        const newUser = await createUser(req.body);
+        sendSuccess(res, newUser, 201, 'User created successfully');
     } catch (error) {
         res.status(500).json({ message: 'Error creating user' });
     }
