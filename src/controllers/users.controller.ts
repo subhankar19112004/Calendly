@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, findAllUsers, findUserById } from '../services/users.service.js';
+import { createUser, deleteUserById, findAllUsers, findUserById, updateUserData } from '../services/users.service.js';
 import { notFound } from '../utils/api-error.js';
 import { sendSuccess } from '../utils/api-response.js';
 
@@ -26,4 +26,18 @@ export const createUserController = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ message: 'Error creating user' });
     }
+}
+
+export const updateUserController = async (req: Request, res: Response) => { 
+    const { id } = req.params;
+    const userData = req.body;
+
+    const updateduser = await updateUserData(Number(id), userData);
+    sendSuccess(res, updateduser, 200, 'User updated successfully');
+}
+
+export const deleteUserController = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const deletedUser = await deleteUserById(Number(id));
+    sendSuccess(res, deletedUser, 200, 'User deleted successfully');
 }
