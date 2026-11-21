@@ -19,5 +19,32 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  eventTypes Event_type[]
+
   @@map("users")
 }
+
+
+model Event_type {
+  id                      Int   @id @default(autoincrement())
+  hostId                  Int
+  title                   String
+  description             String?
+  durationMinutes         Int
+  isActive                Boolean @default(true)
+  locationType            String @default("online")
+  locationValue           String?
+  bufferTimeBeforeMinutes Int @default(0)
+  bufferTimeAfterMinutes  Int @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
+
+  @@map("event_types")
+}
+
+/*
+  * BufferInMinutes: The amount of time (in minutes) to block before the event.
+  * BufferOutMinutes: The amount of time (in minutes) to block after the event
+*/
