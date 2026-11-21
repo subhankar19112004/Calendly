@@ -1,7 +1,7 @@
 import { prisma } from "../config/database.js";
-import { CreateUserDto } from "../dtos/users.dto.js";
-import { getAll, getUserById, createUser as createUserRepo } from "../repositories/users.repository.js"
-import { conflict } from "../utils/api-error.js";
+import { CreateUserDto, UpdateUserDto } from "../dtos/users.dto.js";
+import { getAll, getUserById, createUser as createUserRepo, updateUserDataRepo, deleteUserByIdRepo } from "../repositories/users.repository.js"
+import { conflict, notFound } from "../utils/api-error.js";
 
 export const findAllUsers = async () => {
     const users = await getAll();
@@ -31,4 +31,28 @@ export const createUser = async (userData: CreateUserDto) => {
         throw conflict('User already exists');
     }
     return createUserRepo(userData);
+}
+
+export const updateUserData = async (id: number, userdata: UpdateUserDto) => {
+    const user = await findUserById(id);
+    if (!user) {
+        throw notFound('User not found');
+    }
+
+    if (userdata.email && userdata.email !== user.email) {
+        const existingUser = await findByMail(userdata.email);
+        if (existingUser) {
+            throw conflict('Email already in use');
+        }
+    }
+
+    return updateUserDataRepo(id, userdata);
+}
+
+export const deleteUserById = async (id: number) => {
+    const user = await findUserById(id);
+    if (!user) {
+        throw notFound('User not found');
+    }
+    return deleteUserByIdRepo(id);
 }
